@@ -47,28 +47,7 @@ key = b'Sixteen byte keySixteen byte key'
 sep =" "
 # d time (in Sec) between sending data to PLC and BPLC
 d_time=0.011
-def encrypt(data):
-    ddb = data.encode('utf-8')
-    cipher = ChaCha20.new(key=key)
-    ciphertext = cipher.encrypt(ddb) 
-    nonce = b64encode(cipher.nonce).decode('utf-8')                                                                       
-    en_dd = b64encode(ciphertext).decode('utf-8')   
-    return en_dd + sep + nonce
 
-#Decryption Module using ChaCha
-def decrypt(data):   
-    en_dd =  data.decode("utf-8")   
-    en_dd_cn = en_dd.split(sep)            
-    ciphertext = b64decode(en_dd_cn[0])
-    nonce = b64decode(en_dd_cn[1])  
-    #print(en_dd)      
-    #print("ciphertext ;",ciphertext)
-    #print("nonce :", nonce)       
-                   
-    cipher_d = ChaCha20.new(key=key,nonce=nonce)
-    ddb = cipher_d.decrypt(ciphertext)          
-    #print("Decoded data :",ddb)
-    return ddb.decode("utf-8")
 
 def hashSha256(data):
     ms = hashlib.sha256()
@@ -98,7 +77,6 @@ def scada_client_program():
        
     print("d (in sec)", d_time)
     #this  loop is to n time change actuator value 
-
 
 
     '''
@@ -149,71 +127,7 @@ def scada_client_program():
        
         time.sleep(delay)
     
-    read_experiment_run =False
-    if(read_experiment_run == True):
-        print("---Read Experiment ---")
-
-        #ReaD SYMBOLS 
-        r_tbl =["v1","v1","v1","v1", "v1",
-                "v1","v1","v1","v1", "v1",
-                "v1","v1","v1","v1", "v1",
-                "v1","v1","v1","v1", "v1",
-                "v1","v1","v1","v1", "v1",
-                "v1","v1","v1","v1", "v1",
-                "v1","v1","v1","v1", "v1",
-                "v1","v1","v1","v1", "v1",
-                "v1","v1","v1","v1", "v1",
-                "v1","v1","v1","v1", "v1"]
-        print(r_tbl)
-        #Read Experiment 
-        for data in r_tbl:               
-            print(data)
-            PLCClient.send(str.encode(data))
-            time.sleep(d_time)
-            start_time = time.time()
-            #data_en = encrypt(data)  
-            #hash_data = hashSha256(data)
-            #print("hash data" + data)      
-            BPLCClient.sendall(str.encode(data),)
-            time_taken = (time.time() - start_time)
-            print("Scada time  (s_t1) in seconds :", time_taken ) 
-            res = PLCClient.recv(BUFFER_SIZE)              
-            print("PLC rs: "+res.decode('utf-8'))
-            res = BPLCClient.recv(BUFFER_SIZE)
-            
-            print("BPLC rs en: "+res.decode('utf-8'))
-            start_time = time.time()
-            d_data = decrypt(res)
-            time_taken = (time.time() - start_time)
-            print("Scada time  (s_t2) in seconds :", time_taken ) 
-            time_taken = (time.time() - start_time)
-            print("BPLC rs: "+ str(d_data))
-            time.sleep(delay)
-    '''
-    print("---User Input Experiment ---")
-    while True:        
-        data = input('>symbol,val (for example v1,10): ') 
-        #data = "v1,"+str(val)     
-        PLCClient.sendall(str.encode(data))
-        
-        time.sleep(d_time)
-        start_time = time.time()
-        data_en = encrypt(data)        
-        BPLCClient.sendall(str.encode(data_en),)
-        time_taken = (time.time() - start_time)
-        print("Scada time  (s_t1) in seconds :", time_taken )         
-        res = PLCClient.recv(BUFFER_SIZE)              
-        print("PLC rs: "+res.decode('utf-8'))
-        res = BPLCClient.recv(BUFFER_SIZE)
-        print("BPLC rs: "+res.decode('utf-8'))
-        lst = data.split(",")
-        if(len(lst)==1):
-            start_time = time.time()
-            d_data = decrypt(res)
-            time_taken = (time.time() - start_time)
-            print("Scada time  (s_t2) in seconds :", time_taken ) 
-            print("BPLC rs -v:"+ str(d_data))
-    '''
+    
     print("=========Experiment run Successfully============")        
     PLCClient.close()
     BPLCClient.close()

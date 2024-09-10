@@ -41,26 +41,6 @@ key = b'Sixteen byte keySixteen byte key'
 sep =" "
 
 #Comparision Module 
-#Modify it for each case study 
-def check_tamper(lst):      
-    res = "invalid request"
-    idx = NO_DATA_IDX    
-    if(lst[0]=="v1"):
-        idx = v1_idx
-    elif(lst[0]=="v2"):
-        idx = v2_idx 
-    if  idx != NO_DATA_IDX :     
-        if(len(lst)==1):
-            res = str(output_table[idx])   
-            res = encrypt(res)
-        else:
-            #write request 
-            if output_table[idx] != int(lst[1]):            
-                res = "Data TAMPERED ("+str(output_table[idx]) +"="+ lst[1]+")"
-            else:
-                res = "Data NOT tampered ("+str(output_table[idx]) +"="+ lst[1] +")"
-       
-    return res
 #-----------------For hashing ------------
 def compare_bytes(val1, val2):
     if len(val1) != len(val2):
@@ -72,7 +52,7 @@ def compare_bytes(val1, val2):
     return True
 
 #only considered v1 for experiment to make it work for any
-#any actuator change code code using code in def check_tamper()
+#any actuator change  for each case study 
 #this is for write experiment 
 def check_tamper_hased_value(val):      
     idx = v1_idx      
@@ -113,29 +93,6 @@ def decode_table(data):
     if value:
         table[table_index] = int(value)
 
-#Encryption Module using ChaCha
-def encrypt(data):
-    ddb = data.encode('utf-8')
-    cipher = ChaCha20.new(key=key)
-    ciphertext = cipher.encrypt(ddb) 
-    nonce = b64encode(cipher.nonce).decode('utf-8')                                                                       
-    en_dd = b64encode(ciphertext).decode('utf-8')   
-    return en_dd + sep + nonce
-
-#Decryption Module using ChaCha
-def decrypt(data):   
-    en_dd =  data.decode("utf-8")   
-    en_dd_cn = en_dd.split(sep)            
-    ciphertext = b64decode(en_dd_cn[0])
-    nonce = b64decode(en_dd_cn[1])  
-    #print(en_dd)      
-    #print("ciphertext ;",ciphertext)
-    #print("nonce :", nonce)       
-                   
-    cipher_d = ChaCha20.new(key=key,nonce=nonce)
-    ddb = cipher_d.decrypt(ciphertext)          
-    #print("Decoded data :",ddb)
-    return ddb.decode("utf-8")
 
 #Hash value 
 def hashSha256(data):
@@ -143,13 +100,6 @@ def hashSha256(data):
     ms.update(str(data).encode('utf-8'))
     h = ms.hexdigest()            
     return h
-
-#process data and make response for scada 
-def process_data(data):
-     d_data = decrypt(data)
-     lst = str(d_data).split(",")  
-     res = check_tamper(lst)
-     return res
 
 #Process data using hashing 
 def process_hashed_data(data):
