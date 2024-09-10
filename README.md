@@ -26,8 +26,8 @@ The attacker program intercepts the communication between the SCADA system and t
 ## Prerequisites
 To run this code, you need the following:
 
-- Python 3.x installed on your system.
-- The following Python packages: socket, threading, and time.
+- Python 3.x
+- Basic understanding of networking and socket programming.
 - hashlib 
 
 ## Usage
@@ -79,7 +79,7 @@ PLC_PORT: The port number for PLC communication.
 
 # bplcy.py: Backup PLC (BPLC) Script
 
-This repository contains a Python script that simulates a **Backup Programmable Logic Controller (BPLC)**. The BPLC is designed to ensure redundancy by mirroring the output data of the main PLC and verifying the integrity of the received data using hashing techniques.
+This file contains a Python script that simulates a **Backup Programmable Logic Controller (BPLC)**. The BPLC is designed to ensure redundancy by mirroring the output data of the main PLC and verifying the integrity of the received data using hashing techniques.
 
 
 ## Introduction
@@ -101,3 +101,45 @@ The BPLC:
 ### Hashing Mechanism
 - The BPLC uses the SHA-256 hashing algorithm to ensure data integrity.
 - When a client (such as SCADA) sends a request, the BPLC compares the hash of the received data with the expected hash to detect any tampering.
+
+# scada.py: SCADA Program
+
+This file contains a Python script that simulates a **Supervisory Control and Data Acquisition (SCADA)** system. The SCADA system communicates with both a **Primary PLC** and a **Backup PLC (BPLC)** to send control commands and verify the integrity of the data using hashing mechanisms. It also supports testing in a simulated **Man-in-the-Middle (MITM)** attack environment.
+
+## Introduction
+
+The **SCADA** program allows the control of actuators (such as `v1`) in the PLC system by sending values to the PLC and verifying the data integrity via a hash-based comparison with the Backup PLC (BPLC). It can simulate a Man-in-the-Middle (MITM) attack scenario by modifying the network communication paths.
+
+## How It Works
+
+1. **PLC Communication**: SCADA connects to both the primary PLC and the backup PLC (BPLC). It sends actuator control values (e.g., for `v1`) to the primary PLC.
+   
+2. **Hashing and Integrity Check**: SCADA generates an SHA-256 hash of the sent data and transmits it to the BPLC for integrity verification. The BPLC compares the received hash with the expected value and reports if the data is tampered.
+
+3. **Man-in-the-Middle (MITM) Simulation**: If MITM simulation is enabled (`SIMULATE_MITM`), SCADA connects to an attacker-controlled intermediary rather than the real PLC.
+
+# attacker.py: Attacker MITM Program
+
+This repository contains a Python script that simulates a **Man-in-the-Middle (MITM)** attack between a **Programmable Logic Controller (PLC)** and a **client** (e.g., SCADA). The attacker intercepts, modifies, and forwards the communication, allowing tampering with the data exchanged between the two parties.
+
+## Introduction
+
+In a **Man-in-the-Middle (MITM)** attack, an attacker intercepts the communication between two parties (in this case, a client and a PLC) to modify or tamper with the exchanged data. This script demonstrates how an attacker can manipulate control data or read responses by acting as an intermediary between the SCADA and PLC.
+
+## How It Works
+
+1. **Interception**: The attacker listens for connections from a client (e.g., SCADA) and establishes a connection with the PLC.
+2. **Tampering**: The attacker modifies the data before forwarding it to the intended recipient.
+   - **Write requests**: The attacker modifies the data being sent to the PLC, altering actuator control or sensor data.
+   - **Read responses**: The attacker modifies the PLC's response before sending it to the client.
+3. **Forwarding**: After modification, the tampered data is forwarded to the respective party (either the PLC or the client).
+
+### Example Scenario:
+- SCADA sends a write request to the PLC to update a sensor value.
+- The attacker intercepts this request and adds additional data before forwarding it to the PLC.
+- When the PLC responds with a read request, the attacker intercepts the response, appends false data, and sends it to SCADA.
+
+
+# Disclaimer
+This code is for educational and research purposes only. The repository provided as a starting point for building PLC tamper detection framework using BPLC. It is coded for specific case studies only. This code does not cover all aspects of a complete PLC system we have implemented only supervision layer. Control layer is not implemented It may not be suitable for production environments and may require additional security measures and error handling. Use it at your own risk.
+
