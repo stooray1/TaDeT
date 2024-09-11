@@ -1,13 +1,8 @@
 import socket
 import time
 import hashlib
-from Crypto.Cipher import ChaCha20
 from base64 import b64encode
 from base64 import b64decode
-from Crypto.Util.Padding import pad
-from Crypto.Random import get_random_bytes
-from codecs import utf_16_be_decode
-from Crypto.Util.Padding import  unpad
 from pprint import pprint as pp
 
 #To simulate MITM/attacker  use this 

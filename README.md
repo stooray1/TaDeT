@@ -141,5 +141,5 @@ In a **Man-in-the-Middle (MITM)** attack, an attacker intercepts the communicati
 
 
 # Disclaimer
-This code is for educational and research purposes only. The repository provided as a starting point for building PLC tamper detection framework using BPLC. It is coded for specific case studies only. This code does not cover all aspects of a complete PLC system we have implemented only supervision layer. Control layer is not implemented It may not be suitable for production environments and may require additional security measures and error handling. Use it at your own risk.
+This code is for educational and research purposes only. It is coded for specific case studies only. This code does not cover all aspects of a complete PLC system we have implemented only supervision layer. Control layer is not implemented It may not be suitable for production environments and may require additional security measures and error handling. Use it at your own risk.
 
