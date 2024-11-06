@@ -1,14 +1,14 @@
 import socket
 import time
 
-#PLC target address and port 
-#PLC_IP = '127.0.0.1'
-PLC_IP = '192.168.0.101'
+#PLC target address and port update it for your device 
+PLC_IP = '127.0.0.1'
+#PLC_IP = '192.00.00.00'
 PLC_PORT = 12345
 
-#Attacker address and port 
-#AT_IP ='127.0.0.1'
-AT_IP = '192.168.0.102'
+#Attacker (MITM) address and port number update it for your device  
+AT_IP ='127.0.0.1'
+#AT_IP = '192.00.00.00'
 AT_PORT = 23456
 
 NO_DATA_IDX =-1

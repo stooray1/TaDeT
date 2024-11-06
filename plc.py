@@ -5,10 +5,11 @@ import time
 First run plc.py then bplc.py (backup PLC) followed by attacker and lastly scada.py
 '''
 
-# For Wifi communication with SCADA and BPLC 
-#PLC_IP = '192.168.178.86'
-PLC_IP = '192.168.0.101'
-#PLC_IP = '127.0.0.1'
+#Use the IP address of your PLC device 
+# For communication with SCADA and BPLC 
+
+#PLC_IP = '192.00.00.00'
+PLC_IP = '127.0.0.1'
 PLC_PORT = 12345
 
 # Define the buffer size for incoming data
@@ -109,7 +110,7 @@ def make_read_data(tbl, symbol_idx):
             r_data=str(output_table[symbol_idx])
     
     return r_data
-#Previous name was make_read_data
+
 def encode_table(tbl, symbol_idx):
     r_data =""
     if(tbl=="i"):

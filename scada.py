@@ -11,35 +11,28 @@ SIMULATE_MITM = True
 PLC_IP   = '127.0.0.1'
 PLC_PORT = 0
 
+#Update IP address for your devices 
 if(SIMULATE_MITM):
     print("Simulating MITM/attacker ")
-    #PLC_IP = '192.168.178.85'
-    PLC_IP = '192.168.0.102'
-    #PLC_IP   = '127.0.0.1'
+    #Attacker(MITM) target address and port 
+    #PLC_IP = '192.00.00.00'    
+    PLC_IP   = '127.0.0.1'
     PLC_PORT = 23456
 else:
     print("NO MITM/attacker ")
     #PLC target address and port 
-    #PLC_IP = '127.0.0.1'
-    #
-    PLC_IP = '192.168.0.101'
     #PLC_IP = '192.168.178.86'
+    PLC_IP = '127.0.0.1'       
     PLC_PORT = 12345
 
 #BPLC target address and port 
-#BPLC_IP = "127.0.0.1"
-BPLC_IP = "192.168.0.100"
-#BPLC_IP = "192.168.178.87"
+#BPLC_IP = "192.00.00.00"
+BPLC_IP = "127.0.0.1"
 BPLC_PORT = 50015
 
 # Define the buffer size for incoming data
 BUFFER_SIZE = 1024
 
-# Encription key 
-
-key = b'Sixteen byte keySixteen byte key'
-# encrypted data and nonce separator 
-sep =" "
 # d time (in Sec) between sending data to PLC and BPLC
 d_time=0.011
 

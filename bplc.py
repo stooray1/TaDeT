@@ -2,29 +2,22 @@ import socket
 import time 
 import threading
 import hashlib
-from Crypto.Cipher import ChaCha20
-from base64 import b64encode
-from base64 import b64decode
-from Crypto.Util.Padding import pad
 
-
-from Crypto.Random import get_random_bytes
-from codecs import utf_16_be_decode
-from Crypto.Util.Padding import  unpad
 
 # Define the buffer size for incoming data
 BUFFER_SIZE = 1024
 
+#Use the IP address of your PLC device 
 
-#PLC_IP = '192.168.178.86'
-PLC_IP = '192.168.0.101'
-#PLC_IP = '127.0.0.1'
+#PLC_IP = '192.000.000.00'
+PLC_IP = '127.0.0.1'
 PLC_PORT = 12345
 
-#Ip address of BPLC 
-#BPLC_IP = '127.0.0.1'
-BPLC_IP = '192.168.0.100'
+#Use the IP address of your BPLC device 
+BPLC_IP = '127.0.0.1'
+#BPLC_IP = '192.00.000.00'
 BPLC_PORT = 50015
+
 #sensors 
 input_table = [50]
 temp_idx = 0 
@@ -34,14 +27,9 @@ v1_idx  = 0
 v2_idx  = 1
 
 NO_DATA_IDX = -1
-# Encription key 
 
-key = b'Sixteen byte keySixteen byte key'
-# encrypted data and nonce separator 
-sep =" "
+#Comparision Module using hasing 
 
-#Comparision Module 
-#-----------------For hashing ------------
 def compare_bytes(val1, val2):
     if len(val1) != len(val2):
         return False
@@ -51,8 +39,8 @@ def compare_bytes(val1, val2):
             return False
     return True
 
-#only considered v1 for experiment to make it work for any
-#any actuator change  for each case study 
+#only considered v1 for experiment to make it work for
+#any actuator change it for each case study 
 #this is for write experiment 
 def check_tamper_hased_value(val):      
     idx = v1_idx      
